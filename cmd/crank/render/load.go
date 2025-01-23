@@ -88,7 +88,7 @@ func LoadFunctions(filesys afero.Fs, file string) ([]pkgv1.Function, error) {
 		case pkgv1.FunctionGroupVersionKind, pkgv1beta1.FunctionGroupVersionKind:
 			functions = append(functions, *f)
 		default:
-			return nil, errors.Errorf("not a function: %s/%s", gvk.Kind, f.GetName())
+			continue // Do nothing and continue to the next iteration
 		}
 	}
 
