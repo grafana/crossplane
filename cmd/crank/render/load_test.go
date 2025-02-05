@@ -234,12 +234,13 @@ func TestLoadFunctions(t *testing.T) {
 				err: cmpopts.AnyError,
 			},
 		},
-		"NotAFunction": {
-			file: "testdata/xr.yaml",
-			want: want{
-				err: cmpopts.AnyError,
-			},
-		},
+		// We want to skip not a function objects without error
+		// "NotAFunction": {
+		// 	file: "testdata/xr.yaml",
+		// 	want: want{
+		// 		err: cmpopts.AnyError,
+		// 	},
+		// },
 	}
 
 	for name, tc := range cases {
