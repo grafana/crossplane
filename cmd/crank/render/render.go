@@ -188,22 +188,26 @@ func GetSecret(name string, nameSpace string, secrets []corev1.Secret) (*corev1.
 }
 
 // Render the desired XR and composed resources, sorted by resource name, given the supplied inputs.
-func Render(ctx context.Context, log logging.Logger, in Inputs) (Outputs, error) { //nolint:gocognit // TODO(negz): Should we refactor to break this up a bit?
-	runtimes, err := NewRuntimeFunctionRunner(ctx, log, in.Functions)
-	if err != nil {
-		return Outputs{}, errors.Wrap(err, "cannot start function runtimes")
-	}
+func Render(ctx context.Context, log logging.Logger, in Inputs, runtimes *RuntimeFunctionRunner) (Outputs, error) { //nolint:gocognit // TODO(negz): Should we refactor to break this up a bit?
+	if runtimes == nil {
+		var err error
 
-	defer func() { //nolint:contextcheck // See comment on next line.
-		// Don't use the main context, since it may be cancelled by the time we
-		// get to cleanup (e.g., if render times out).
-		stopCtx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-		defer cancel()
-
-		if err := runtimes.Stop(stopCtx); err != nil {
-			log.Info("Error stopping function runtimes", "error", err)
+		runtimes, err = NewRuntimeFunctionRunner(ctx, log, in.Functions)
+		if err != nil {
+			return Outputs{}, errors.Wrap(err, "cannot start function runtimes")
 		}
-	}()
+
+		defer func() { //nolint:contextcheck // See comment on next line.
+			// Don't use the main context, since it may be cancelled by the time we
+			// get to cleanup (e.g., if render times out).
+			stopCtx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+			defer cancel()
+
+			if err := runtimes.Stop(stopCtx); err != nil {
+				log.Info("Error stopping function runtimes", "error", err)
+			}
+		}()
+	}
 
 	schemaFetcher := NewFilteringSchemaFetcher(in.RequiredSchemas)
 	runner := xfn.NewFetchingFunctionRunner(runtimes, NewFilteringFetcher(append(in.ExtraResources, in.RequiredResources...)...), schemaFetcher)
