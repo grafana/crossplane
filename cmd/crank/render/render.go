@@ -172,17 +172,20 @@ func getSecret(name string, nameSpace string, secrets []corev1.Secret) (*corev1.
 }
 
 // Render the desired XR and composed resources, sorted by resource name, given the supplied inputs.
-func Render(ctx context.Context, log logging.Logger, in Inputs) (Outputs, error) { //nolint:gocognit // TODO(negz): Should we refactor to break this up a bit?
-	runtimes, err := NewRuntimeFunctionRunner(ctx, log, in.Functions)
-	if err != nil {
-		return Outputs{}, errors.Wrap(err, "cannot start function runtimes")
-	}
-
-	defer func() {
-		if err := runtimes.Stop(ctx); err != nil {
-			log.Info("Error stopping function runtimes", "error", err)
+func Render(ctx context.Context, log logging.Logger, in Inputs, runtimes *RuntimeFunctionRunner) (Outputs, error) { //nolint:gocognit // TODO(negz): Should we refactor to break this up a bit?
+	if runtimes == nil {
+		var err error
+		runtimes, err = NewRuntimeFunctionRunner(ctx, log, in.Functions)
+		if err != nil {
+			return Outputs{}, errors.Wrap(err, "cannot start function runtimes")
 		}
-	}()
+
+		defer func() {
+			if err := runtimes.Stop(ctx); err != nil {
+				log.Info("Error stopping function runtimes", "error", err)
+			}
+		}()
+	}
 
 	runner := composite.NewFetchingFunctionRunner(runtimes, &FilteringFetcher{extra: in.ExtraResources})
 

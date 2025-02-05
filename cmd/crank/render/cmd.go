@@ -230,7 +230,7 @@ func (c *Cmd) Run(k *kong.Context, log logging.Logger) error { //nolint:gocognit
 		ObservedResources:   ors,
 		ExtraResources:      ers,
 		Context:             fctx,
-	})
+	}, nil)
 	if err != nil {
 		return errors.Wrap(err, "cannot render composite resource")
 	}

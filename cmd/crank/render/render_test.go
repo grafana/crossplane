@@ -762,7 +762,7 @@ func TestRender(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
-			out, err := Render(tc.args.ctx, logging.NewNopLogger(), tc.args.in)
+			out, err := Render(tc.args.ctx, logging.NewNopLogger(), tc.args.in, nil)
 
 			if diff := cmp.Diff(tc.want.out, out, cmpopts.EquateEmpty()); diff != "" {
 				t.Errorf("%s\nRender(...): -want, +got:\n%s", tc.reason, diff)
