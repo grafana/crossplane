@@ -123,7 +123,7 @@ require (
 	github.com/sigstore/sigstore/pkg/signature/kms/azure v1.8.6 // indirect
 	github.com/sigstore/sigstore/pkg/signature/kms/gcp v1.8.6 // indirect
 	github.com/sigstore/sigstore/pkg/signature/kms/hashivault v1.8.6 // indirect
-	github.com/sigstore/timestamp-authority v1.2.2 // indirect
+	github.com/sigstore/timestamp-authority/v2 v2.0.3 // indirect
 	github.com/skeema/knownhosts v1.3.0 // indirect
 	github.com/sourcegraph/conc v0.3.0 // indirect
 	github.com/spf13/cast v1.6.0 // indirect
