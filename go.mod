@@ -118,7 +118,7 @@ require (
 	github.com/secure-systems-lab/go-securesystemslib v0.8.0 // indirect
 	github.com/sergi/go-diff v1.3.2-0.20230802210424-5b0b94c5c0d3 // indirect
 	github.com/shibumi/go-pathspec v1.3.0 // indirect
-	github.com/sigstore/rekor v1.3.6 // indirect
+	github.com/sigstore/rekor v1.5.2 // indirect
 	github.com/sigstore/sigstore/pkg/signature/kms/aws v1.8.6 // indirect
 	github.com/sigstore/sigstore/pkg/signature/kms/azure v1.8.6 // indirect
 	github.com/sigstore/sigstore/pkg/signature/kms/gcp v1.8.6 // indirect
